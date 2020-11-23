@@ -6,7 +6,8 @@ public class Hw3 {
     private static Random rand = new Random();
     private static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
-//        guessNumber();
+        guessNumber();
+        guessWord();
         guessWord2();
 
     }
