@@ -3,8 +3,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class XOGame {
-    static final int SIZE = 3;
-//    static final int DOTS_TO_WIN=3;
+    static final int SIZE = 5;
+    static final int DOTS_TO_WIN = 4;
 
     static final char DOT_X = 'X';
     static final char DOT_O = 'O';
@@ -77,15 +77,51 @@ public class XOGame {
         map[y][x] = DOT_X;
     }
 
+    static boolean aiAttack() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (map[i][j]==DOT_EMPTY){
+                    map[i][j] = DOT_O;
+                    if (checkWin(DOT_O)) {
+                        return true;
+                    } else {
+                        map[i][j] = DOT_EMPTY;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    static boolean aiDefend() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (map[i][j]==DOT_EMPTY){
+                    map[i][j] = DOT_X;
+                    if (checkWin(DOT_X)) {
+                        map[i][j]=DOT_O;
+                        return true;
+                    } else {
+                        map[i][j] = DOT_EMPTY;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     static void aiTurn() {
         int x;
         int y;
-        do {
-
-            x = random.nextInt(SIZE);
-            y = random.nextInt(SIZE);
-        } while (!isCellValid(y, x));
-        map[y][x] = DOT_O;
+        if (!aiAttack()) {
+            if(!aiDefend()){
+                do {
+                    x = random.nextInt(SIZE);
+                    y = random.nextInt(SIZE);
+                } while (!isCellValid(y, x));
+                map[y][x] = DOT_O;
+            }
+        }
     }
 
     static boolean isCellValid(int y, int x) {
@@ -106,17 +142,62 @@ public class XOGame {
         return true;
     }
 
-    static boolean checkWin(char c){
-        if (map[0][0]==c && map[0][1]==c && map[0][2]==c){return true;}
-        if (map[1][0]==c && map[1][1]==c && map[1][2]==c){return true;}
-        if (map[2][0]==c && map[2][1]==c && map[2][2]==c){return true;}
-
-        if (map[0][0]==c && map[1][0]==c && map[2][0]==c){return true;}
-        if (map[0][1]==c && map[1][1]==c && map[2][1]==c){return true;}
-        if (map[0][2]==c && map[1][2]==c && map[2][2]==c){return true;}
-
-        if (map[0][0]==c && map[1][1]==c && map[2][2]==c){return true;}
-        if (map[0][2]==c && map[1][1]==c && map[2][0]==c){return true;}
+    static boolean checkWin(char c) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (verticalLine(c, i, j) || horizonLine(c, i, j) || diagonal1Line(c, i, j) || diagonal2Line(c, i, j)) {
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    static boolean verticalLine(char c, int y, int x) {
+        if (y + DOTS_TO_WIN > SIZE) {
+            return false;
+        }
+        for (int i = y; i < y + DOTS_TO_WIN; i++) {
+            if (map[i][x] != c) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean horizonLine(char c, int y, int x) {
+        if (x + DOTS_TO_WIN > SIZE) {
+            return false;
+        }
+        for (int i = x; i < x + DOTS_TO_WIN; i++) {
+            if (map[y][i] != c) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean diagonal1Line(char c, int y, int x) {
+        if (y + DOTS_TO_WIN > SIZE || x + DOTS_TO_WIN > SIZE) {
+            return false;
+        }
+        for (int i = 0; i < DOTS_TO_WIN; i++) {
+            if (map[y + i][x + i] != c) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean diagonal2Line(char c, int y, int x) {
+        if (y - DOTS_TO_WIN+1 < 0 || x + DOTS_TO_WIN > SIZE) {
+            return false;
+        }
+        for (int i = 0; i < DOTS_TO_WIN; i++) {
+            if (map[y - i][x + i] != c) {
+                return false;
+            }
+        }
+        return true;
     }
 }
