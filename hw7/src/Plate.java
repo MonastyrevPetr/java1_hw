@@ -18,6 +18,10 @@ public class Plate {
         food -= amount;
     }
 
+    public void addFood(int food) {
+        this.food = this.food+food;
+    }
+
     public void info() {
         System.out.println("Food: " + food);
     }

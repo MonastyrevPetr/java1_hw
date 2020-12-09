@@ -57,13 +57,30 @@ public class Main {
 //        System.out.println(sb);
 
 
-        Cat cat = new Cat("Murzik");
-        Plate plate = new Plate(100);
-        cat.eat(plate);
+        Cat[] cat = new Cat[10];
+        cat[0] = new Cat("Murzic",10);
+        cat[1] = new Cat("Vaska",15);
+        cat[2] = new Cat("Ryzhic",50);
+        cat[3] = new Cat("Barsic",15);
+        cat[4] = new Cat("Pushistic",10);
+        Plate plate = new Plate(70);
+        for (int i = 0; i < 5; i++) {
+            cat[i].eat(plate,cat[i].getHunger());
+        }
+        for (int i = 0; i < 5; i++) {
+            if (cat[i].getSatiety()){
+                System.out.println(cat[i].getName()+" сыт");
+            }else {System.out.println(cat[i].getName()+" голоден");
+
+            }
+
+        }
+        plate.info();
+        plate.addFood(20);
         plate.info();
 
-        Dog dog = new Dog("Tuzik");
-        dog.scare(cat);
+//        Dog dog = new Dog("Tuzik");
+//        dog.scare(cat);
 
 
 
