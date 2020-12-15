@@ -17,12 +17,15 @@ public class Logic {
 
     static boolean gameFinished;
 
+    static int gameWinner;
+
     public static void go() {
         gameFinished = true;
 
         printMap();
         if (checkWinLines(DOT_X, DOTS_TO_WIN)) {
             System.out.println("Вы выиграли!!!");
+
             return;
         }
         if (isFull()) {
